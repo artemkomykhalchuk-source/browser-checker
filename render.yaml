@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: browser-checker
+    env: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python -m playwright install --with-deps chromium
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: API_KEY
+        generateValue: true
+      - key: NAV_TIMEOUT_MS
+        value: "30000"
+      - key: WAIT_AFTER_LOAD_MS
+        value: "1500"
+      - key: USER_AGENT
+        value: "QA-BrowserChecker/1.0 (+monitoring)"
