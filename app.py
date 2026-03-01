@@ -23,8 +23,11 @@ def health():
 
 @app.post("/run")
 async def run(req: RunRequest, x_api_key: str = Header(default="")):
-  if not API_KEY or x_api_key != API_KEY:
-    raise HTTPException(status_code=401, detail="Unauthorized")
+  if not API_KEY:
+    raise HTTPException(status_code=500, detail="API_KEY env var is missing on server")
+  if x_api_key != API_KEY:
+    raise HTTPException(status_code=401, detail=f"Unauthorized (got_len={len(x_api_key)})")
+
 
   results: List[Dict[str, Any]] = []
 
